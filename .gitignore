@@ -1,0 +1,13 @@
+# Entorno virtual
+.venv/
+.venv_practica/
+venv/
+env/
+__pycache__/
+*.py[cod]
+
+# Base de datos local (Laboratorio)
+*.db
+*.sqlite3
+*.db-wal
+*.db-shm

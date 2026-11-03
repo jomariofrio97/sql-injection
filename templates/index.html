@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laboratorio de SQL Injection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+  <header class="encabezado">
+    <h1>Laboratorio de SQL Injection</h1>
+    <section class="aviso" aria-label="Aviso de uso">
+      <p>Uso exclusivamente académico y local. Todos los datos son ficticios; no pruebes otros sistemas.</p>
+    </section>
+  </header>
+
+  <main>
+    <section class="busqueda" aria-labelledby="titulo-busqueda">
+      <h2 id="titulo-busqueda">Buscar usuarios</h2>
+      <form action="/buscar" method="get">
+        <fieldset>
+          <legend>Parámetros de búsqueda</legend>
+          <label for="nombre">Nombre que se buscará
+            <input id="nombre" name="nombre" value="{{ filtro }}" autocomplete="off">
+          </label>
+          <label for="modo">Comportamiento
+            <select id="modo" name="modo">
+              <option value="vulnerable" {% if modo == 'vulnerable' %}selected{% endif %}>Vulnerable</option>
+              <option value="corregido" {% if modo == 'corregido' %}selected{% endif %}>Corregido</option>
+            </select>
+          </label>
+          <button type="submit">Buscar</button>
+        </fieldset>
+      </form>
+    </section>
+
+    {% if se_busco %}
+      <section class="resultados" aria-labelledby="titulo-resultados">
+        <h2 id="titulo-resultados">Resultado de la búsqueda</h2>
+        {% if tipo == 'booleano' %}
+          <p>Señal observable: <strong>{{ 'hay coincidencia' if coincide else 'no hay coincidencia' }}</strong>.</p>
+          <p>Esta demostración solo revela el resultado verdadero/falso, no los registros.</p>
+        {% else %}
+          <p>Se encontraron <strong>{{ registros|length }}</strong> registro(s).</p>
+          {% if registros %}
+            <table>
+              <thead>
+                <tr><th>Nombre o titular</th><th>Dato devuelto</th></tr>
+              </thead>
+              <tbody>
+                {% for registro in registros %}
+                  <tr><td>{{ registro.nombre }}</td><td>{{ registro.dato }}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p>No se encontraron registros.</p>
+          {% endif %}
+        {% endif %}
+      </section>
+    {% endif %}
+  </main>
+
+  <footer class="pie">
+    <p>Laboratorio local con Flask y SQLite.</p>
+  </footer>
+</body>
+</html>
